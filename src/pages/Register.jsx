@@ -1,14 +1,39 @@
 import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { FaUser } from "react-icons/fa";
+import Spinner from "../components/Spinner";
+
+import { register, reset } from "../features/auth/authSlice";
+
 const Register = () => {
   const [formData, setFormData] = useState({
-    name: "",
+    firstName: "",
     email: "",
     password: "",
     password2: "",
   });
 
-  const { name, email, password, password2 } = formData;
+  const { firstName, email, password, password2 } = formData;
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { user, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.auth
+  );
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(message);
+    }
+    if (isSuccess || user) {
+      navigate("/");
+    }
+
+    dispatch(reset);
+  }, [user, isError, isSuccess, message, navigate, dispatch]);
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -18,14 +43,29 @@ const Register = () => {
   };
   const onSubmit = (e) => {
     e.preventDefault();
+
+    if (password !== password2) {
+      toast.error("Passwords do not match");
+    } else {
+      const userData = {
+        firstName,
+        email,
+        password,
+      };
+      dispatch(register(userData));
+    }
   };
+  if (isLoading) {
+    return <Spinner />;
+  }
   return (
     <>
       <section>
         <h1>
           <FaUser /> Register
         </h1>
-        <p>Please create and acccount</p>
+        <p>Please create and account</p>
+
         <section className="form">
           <form onSubmit={onSubmit}>
             <div className="form-group">
@@ -33,8 +73,8 @@ const Register = () => {
                 type="text"
                 className="form-control"
                 id="name"
-                name="name"
-                value={name}
+                name="firstName"
+                value={firstName}
                 placeholder="Enter your name"
                 onChange={onChange}
               />
@@ -63,7 +103,7 @@ const Register = () => {
             </div>
             <div className="form-group">
               <input
-                type="password2"
+                type="password"
                 className="form-control"
                 id="password2"
                 name="password2"
