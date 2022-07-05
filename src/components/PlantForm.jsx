@@ -1,33 +1,33 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 
-import { createGoal } from "../features/goals/goalSlice";
-const GoalForm = () => {
-  const [text, setText] = useState("");
+import { createPlant } from "../features/plants/plantSlice";
+const PlantForm = () => {
+  const [name, setName] = useState("");
   const dispatch = useDispatch();
 
   function onSubmit(e) {
     e.preventDefault();
-    dispatch(createGoal({ text }));
-    setText("");
+    dispatch(createPlant({ name }));
+    setName("");
   }
 
   return (
     <section className="form">
       <form onSubmit={onSubmit}>
         <div className="form-group">
-          <label htmlFor="text">Goal</label>
+          <label htmlFor="name">Plant Name</label>
           <input
             type="text"
-            name="text"
-            id="text"
-            value={text}
-            onChange={(e) => setText(e.target.value)}
+            name="name"
+            id="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
         </div>
         <div className="form-group">
           <button className="btn btn-block" type="submit">
-            Add Goal
+            Add Plant
           </button>
         </div>
       </form>
@@ -35,4 +35,4 @@ const GoalForm = () => {
   );
 };
 
-export default GoalForm;
+export default PlantForm;

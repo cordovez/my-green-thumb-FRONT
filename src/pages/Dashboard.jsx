@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import GoalForm from "../components/GoalForm";
+import PlantForm from "../components/PlantForm";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -16,9 +16,9 @@ const Dashboard = () => {
     <>
       <section className="heading">
         <h1>Welcome {user && user.firstName}</h1>
-        <p>Goals Dashboard</p>
+        <p>Plants Dashboard</p>
       </section>
-      <GoalForm />
+      <PlantForm />
     </>
   );
 };

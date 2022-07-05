@@ -1,19 +1,19 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import goalService from "./goalService";
+import plantService from "./plantService";
 const initialState = {
-  goals: [],
+  plants: [],
   isError: false,
   isSuccess: false,
   isLoading: false,
   message: "",
 };
-// Create new goal
-export const createGoal = createAsyncThunk(
-  "goals/create",
-  async (goalData, thunkApi) => {
+// Create new plant
+export const createPlant = createAsyncThunk(
+  "plants/create",
+  async (plantData, thunkApi) => {
     try {
       const token = thunkApi.getState().auth.user.token;
-      return await goalService.createGoal(goalData, token);
+      return await plantService.createPlant(plantData, token);
     } catch (error) {
       const message =
         (error.response &&
@@ -25,23 +25,23 @@ export const createGoal = createAsyncThunk(
     }
   }
 );
-export const goalSlice = createSlice({
-  name: "goal",
+export const plantSlice = createSlice({
+  name: "plant",
   initialState,
   reducers: {
     reset: (state) => initialState,
   },
   extraReducers: (builder) => {
     builder
-      .addCase(createGoal.pending, (state) => {
+      .addCase(createPlant.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(createGoal.fulfilled, (state, action) => {
+      .addCase(createPlant.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.goals.push(action.payload);
+        state.plants.push(action.payload);
       })
-      .addCase(createGoal.rejected, (state, action) => {
+      .addCase(createPlant.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
@@ -49,5 +49,5 @@ export const goalSlice = createSlice({
   },
 });
 
-export const { reset } = goalSlice.actions;
-export default goalSlice.reducer;
+export const { reset } = plantSlice.actions;
+export default plantSlice.reducer;
